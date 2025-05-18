@@ -69,8 +69,7 @@ class TPQueue {
     return result;
   }
 
- private:  // Added blank line before private:
-
+ private:
   struct Node {
     explicit Node(const T& d) : data(d), next_node_(nullptr) {}
     T data;
