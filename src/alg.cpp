@@ -1,7 +1,13 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
+
 #include <stdexcept>
+
+struct SYM {
+  char ch;
+  int prior;
+};
 
 template <typename T>
 class TPQueue {
@@ -27,17 +33,22 @@ class TPQueue {
   }
 
   void push(const T& item) {
+    Node* newNode = new Node(item);
+
     if (!firstElement || item.prior > firstElement->dataValue.prior) {
-      firstElement = new Node(item, firstElement);
+      newNode->nextElement = firstElement;
+      firstElement = newNode;
       return;
     }
 
     Node* currentElement = firstElement;
     while (currentElement->nextElement &&
-           currentElement->nextElement->dataValue.prior >= item.prior) {
+           item.prior <= currentElement->nextElement->dataValue.prior) {
       currentElement = currentElement->nextElement;
     }
-    currentElement->nextElement = new Node(item, currentElement->nextElement);
+
+    newNode->nextElement = currentElement->nextElement;
+    currentElement->nextElement = newNode;
   }
 
   T pop() {
@@ -56,11 +67,6 @@ class TPQueue {
 
   TPQueue(const TPQueue&) = delete;
   TPQueue& operator=(const TPQueue&) = delete;
-};
-
-struct SYM {
-  char ch;
-  int prior;
 };
 
 #endif  // INCLUDE_TPQUEUE_H_
