@@ -1,4 +1,3 @@
-// Copyright 2022 NNTU-CS
 // Copyright 2025 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
@@ -22,7 +21,9 @@ class TPQueue {
     return *this;
   }
 
-  TPQueue(TPQueue&& other) noexcept : head_node_(other.head_node_) { other.head_node_ = nullptr; }
+  TPQueue(TPQueue&& other) noexcept : head_node_(other.head_node_) {
+    other.head_node_ = nullptr;
+  }
 
   TPQueue& operator=(TPQueue&& other) noexcept {
     if (this != &other) {
@@ -67,7 +68,9 @@ class TPQueue {
     delete node_to_delete;
     return result;
   }
- private:
+
+ private:  // Added blank line before private:
+
   struct Node {
     explicit Node(const T& d) : data(d), next_node_(nullptr) {}
     T data;
