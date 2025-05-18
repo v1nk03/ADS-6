@@ -9,88 +9,57 @@ template<typename T>
 class TPQueue {
  private:
   struct Node {
-    T element;
-    Node* next;
-    explicit Node(const T& val) : element(val), next(nullptr) {}
-
     T data;
-    Node* link;
-    explicit Node(const T& input) : data(input), link(nullptr) {}
+    Node* next;
+
+    explicit Node(const T& input) : data(input), next(nullptr) {}
   };
 
-  Node* firstNode;
   Node* headNode;
 
  public:
-  TPQueue() : firstNode(nullptr) {}
   TPQueue() : headNode(nullptr) {}
 
-  void push(const T& item) {
-    Node* newNode = new Node(item);
-
-    if (firstNode == nullptr || item.prior > firstNode->element.prior) {
-      newNode->next = firstNode;
-      firstNode = newNode;
   ~TPQueue() {
     while (headNode) {
       Node* temp = headNode;
-      headNode = headNode->link;
+      headNode = headNode->next;
       delete temp;
     }
   }
 
   void push(const T& element) {
     Node* newNode = new Node(element);
-    if (!headNode) {
+
+    if (!headNode || element.prior > headNode->data.prior) {
+      newNode->next = headNode;
       headNode = newNode;
       return;
     }
-    if (element.prior > headNode->data.prior) {
-        newNode->link = headNode;
-        headNode = newNode;
-        return;
+
+    Node* iterator = headNode;
+    while (iterator->next && iterator->next->data.prior >= element.prior) {
+      iterator = iterator->next;
     }
-
-    Node* traverse = headNode;
-    while (traverse->link && traverse->link->data.prior >= element.prior) {
-      traverse = traverse->link;
-    }
-    newNode->link = traverse->link;
-    traverse->link = newNode;
-
-
+    newNode->next = iterator->next;
+    iterator->next = newNode;
   }
 
   T pop() {
-    if (firstNode == nullptr) {
-      throw std::string("Queue is empty");
     if (!headNode) {
       throw std::out_of_range("Queue is empty!");
     }
 
-    Node* tempNode = firstNode;
-    T returnValue = tempNode->element;
-    firstNode = firstNode->next;
-    delete tempNode;
-
     Node* removeNode = headNode;
     T returnValue = headNode->data;
-    headNode = headNode->link;
+    headNode = headNode->next;
     delete removeNode;
     return returnValue;
-  }
-
-  ~TPQueue() {
-    while (firstNode != nullptr) {
-      Node* toDelete = firstNode;
-      firstNode = firstNode->next;
-      delete toDelete;
-    }
   }
 };
 
 struct SYM {
-  char ch;
-  int prior;
+  int prior; // 'ch' removed because it's unused.
 };
+
 #endif  // INCLUDE_TPQUEUE_H_
