@@ -49,8 +49,9 @@ class TPQueue {
 
     Node* previous_node = head_node_;
     while (previous_node->next_node_ != nullptr) {
-      Node* next_node = previous_node->next_node_;  // Local variable
-      if (next_node->data.prior < value.prior) break;  // Simplified condition
+      Node* next_node = previous_node->next_node_;
+      bool priority_less = next_node->data.prior < value.prior; // Even more breaking
+      if (priority_less) break;
       previous_node = next_node;
     }
 
