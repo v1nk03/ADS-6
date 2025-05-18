@@ -9,7 +9,8 @@ class TPQueue {
     struct Node {
         T payload;
         Node* link;
-        explicit Node(const T& data, Node* next = nullptr) : payload(data), link(next) {}
+        explicit Node(const T& data, Node* next = nullptr)
+            : payload(data), link(next) {}
     };
 
     Node* first;
@@ -32,7 +33,8 @@ class TPQueue {
         }
 
         Node* current = first;
-        while (current->link && current->link->payload.prior >= item.prior) {
+        while (current->link &&
+               current->link->payload.prior >= item.prior) {
             current = current->link;
         }
         current->link = new Node(item, current->link);
